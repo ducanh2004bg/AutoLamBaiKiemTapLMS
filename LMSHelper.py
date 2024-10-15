@@ -560,11 +560,11 @@ def KiemTraTienDoLMS():
 
     if monHoanThanh == 5:
         print(
-            f" {Fore.YELLOW}Bạn đã hoàn thành {Fore.GREEN}{monHoanThanh}/{mon} {Fore.YELLOW}môn, chúc mừng bạn!!!"
+            f" {Fore.YELLOW}Bạn đã hoàn thành {Fore.LIGHTGREEN_EX}{monHoanThanh}/{mon} {Fore.YELLOW}môn, chúc mừng bạn!!!"
         )
     else:
         print(
-            f" {Fore.YELLOW}Bạn đã hoàn thành {Fore.RED}{monHoanThanh}/{mon} {Fore.YELLOW}môn, hãy làm trước khi hết hạn nhé"
+            f" {Fore.YELLOW}Bạn đã hoàn thành {Fore.LIGHTRED_EX}{monHoanThanh}/{mon} {Fore.YELLOW}môn, hãy làm trước khi hết hạn nhé"
         )
         for mon in tenMonChuaHoanThanh:
             print(f" {Fore.YELLOW}[Môn chưa làm]: {Fore.LIGHTYELLOW_EX}{mon.text}")
@@ -577,7 +577,7 @@ def ButtonSaoChepCauHoiLMS():
         window.copyButton = document.createElement('button');
         window.copyButton.innerHTML = 'Sao chép câu hỏi';
         window.copyButton.style.position = 'fixed';
-        window.copyButton.style.bottom = '20px';
+        window.copyButton.style.top = '13.5px';
         window.copyButton.style.right = '20px';
         window.copyButton.style.padding = '10px 20px';
         window.copyButton.style.backgroundColor = '#007BFF'; // Màu xanh da trời
