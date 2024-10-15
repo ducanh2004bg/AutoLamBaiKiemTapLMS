@@ -416,7 +416,7 @@ def TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
         input = autoDoiPhanTuHienThi_ID(driver, 30, "chat-input-box")
         input.click()
         input.send_keys(
-            "@Gemini-PRO "
+            "@GPT-4o  "
             + "Vui lòng chú ý cau hỏi trong ảnh mà tôi gửi và chỉ trả lời duy nhất một ký tự đại diện cho đáp án chính xác (A, B, C hoặc D). Không thêm bất kỳ văn bản nào khác hoặc ký tự nào khác vào câu trả lời. Chỉ xuất ra duy nhất ký tự."
         )
         input.send_keys(Keys.SHIFT, Keys.ENTER)
