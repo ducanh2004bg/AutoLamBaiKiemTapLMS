@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-#Update 13:20 15-10-2024 LMSHelper
 import time
 import os
 
@@ -36,6 +35,8 @@ except ImportError:
 from time import sleep
 
 """HÀM XỬ LÝ CỨNG"""
+
+"""chuyển tap"""
 
 
 def ChuyenTab1():
@@ -147,50 +148,6 @@ def autoDoiPhanTuHienThi_CSS_SELECTOR(boXuLy, thoiGianXuLy, cssSelector):
 
 
 """ Hàm LOGIN"""
-
-
-# Login LMS
-def LoginLMS(usernameLog, passwordLog):
-    ChuyenTab1()
-    driver.get("https://lms.ictu.edu.vn/dashboard/classes")
-
-    try:
-        tenTaiKhoan = autoKhiPhanTuCoTheClickDuoc_ID(driver, 20, "mat-input-0")
-        tenTaiKhoan.send_keys(usernameLog + "@ictu.edu.vn")  # tk
-
-        matKhau = autoKhiPhanTuCoTheClickDuoc_ID(driver, 20, "mat-input-1")
-        matKhau.send_keys(passwordLog)  # mk
-
-        dangNhap = autoKhiPhanTuCoTheClickDuoc_CLASS_NAME(driver, 20, "grid")
-        dangNhap.click()  # click đăng nhập
-    except:
-        pass
-
-    try:
-        xacNhanDangNhapThanhCong = autoDoiPhanTuHienThi_CSS_SELECTOR(
-            driver, 10, ".header-button__feature__node"
-        )
-        name = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 10, "h6")
-        id = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 10, "small")
-        if xacNhanDangNhapThanhCong.text == "LỚP HỌC PHẦN":
-            os.system("cls")
-            for i in range(3, 0, -1):
-                print(Fore.GREEN + f"[PHẢN HỒI]: Đăng nhập thành công [ID: {id.text}]")
-                print(f"Xin chào {Fore.LIGHTWHITE_EX}{name.text}")
-                print(f"[VUI LÒNG ĐỢI {i} GIÂY]")
-                sleep(1)
-                os.system("cls")
-    except:
-        os.system("cls")
-        for i in range(3, 0, -1):
-            print(Fore.RED + "[LỖI]: Đăng nhập thất bại!!")
-            print(f"[TỰ ĐỘNG THOÁT SAU {i} GIÂY]")
-            sleep(1)
-            os.system("cls")
-        # os.system()
-        exit()
-
-    # Dang nhap xong
 
 
 # Nhap Hashcode
@@ -416,7 +373,7 @@ def TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
         input = autoDoiPhanTuHienThi_ID(driver, 30, "chat-input-box")
         input.click()
         input.send_keys(
-            "@GPT-4o  "
+            "@@GPT-4o "
             + "Vui lòng chú ý cau hỏi trong ảnh mà tôi gửi và chỉ trả lời duy nhất một ký tự đại diện cho đáp án chính xác (A, B, C hoặc D). Không thêm bất kỳ văn bản nào khác hoặc ký tự nào khác vào câu trả lời. Chỉ xuất ra duy nhất ký tự."
         )
         input.send_keys(Keys.SHIFT, Keys.ENTER)
@@ -473,7 +430,7 @@ def QuaTrinhLamBai():  # BẢN DÀNH CHO BINGAI -------------- BINGAI
             print(Fore.GREEN + f"---> [HOÀN THÀNH]: CÂU {cauSo} | Đáp án {cauTraLoi}")
 
 
-def QuaTrinhLamBai_2():  # BẢN DÀNH CHO BLACKBOX -------------- BLACKBOX
+def QuaTrinhLamBai_2():  # BẢN DÀNH CHO BLACKBOX -------------- BLACKBOX---
     cauSo = 0  # khoitao
     cauTraLoi = ""  # khoitao
     print(
@@ -494,8 +451,7 @@ def QuaTrinhLamBai_2():  # BẢN DÀNH CHO BLACKBOX -------------- BLACKBOX
 
 
 # Thực thi bản BingAI    BINGAI---------------
-def ThucThi_1(usern, passw):
-    LoginLMS(usernameLog=usern, passwordLog=passw)
+def ThucThi_BingAI():
     LoginBingAI()
     NhapHashcodeVaLamBai()
     QuaTrinhLamBai()
@@ -510,10 +466,8 @@ def ThucThi_1(usern, passw):
     driver.quit()
 
 
-# Thực thi bản BlackBox BLACKBOX-----
-def ThucThi_2(usern, passw):
-    LoginLMS(usernameLog=usern, passwordLog=passw)
-    # LoginBingAI()
+# Thực thi bản BlackBox  BLACKBOX--------------
+def ThucThi_BlackBoxAI(usern, passw):
     LoginBlackBoxAI()
     NhapHashcodeVaLamBai()
     QuaTrinhLamBai_2()
@@ -528,36 +482,257 @@ def ThucThi_2(usern, passw):
     driver.quit()
 
 
+""" Đăng nhập và thông báo ... Của LMS"""
+
+
+def ThongBao(id, name):
+    os.system("cls")
+    print(
+        f"{Fore.YELLOW}╔═════════════════════════════════════════════════════════════════════════════════════════════╗"
+    )
+    print(
+        f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.0) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
+    )
+    print(
+        f"{Fore.YELLOW}║═════════════════════════════════════════════════════════════════════════════════════════════║"
+    )
+    print(
+        f"{Fore.YELLOW}║ [THÔNG BÁO {setTime.tm_mday}-{setTime.tm_mon}-{setTime.tm_year}]: {Fore.WHITE}Tool Auto: Sẽ dừng ở câu 15 để tránh điểm thấp khi dùng AI.         {Fore.YELLOW}║"
+    )
+    print(
+        f"{Fore.YELLOW}║═════════════════════════════════════════════════════════════════════════════════════════════║"
+    )
+    print(
+        f"{Fore.YELLOW}║ - - - - - - - - - - - - - - - - - - - - - [ PANEL ] - - - - - - - - - - - - - - - - - - - - ║"
+    )
+    print(
+        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[1] | [AUTO] Làm bài tập ở lớp học phần trên trình duyệt Chrome - BINGAI                    {Fore.YELLOW}║"
+    )
+    print(
+        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[2] | [AUTO] Làm bài tập ở lớp học phần trên trình duyệt Chrome - BLACKBOX                  {Fore.YELLOW}║"
+    )
+    print(
+        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[3] | [ADD] Thêm BUTTON Sao chép câu hỏi khi làm LMS trên trình duyệt Chrome                {Fore.YELLOW}║"
+    )
+    print(
+        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[*] | [EXIT] THOÁT TOOL                                                                     {Fore.YELLOW}║"
+    )
+    print(
+        f"{Fore.YELLOW}╚═════════════════════════════════════════════════════════════════════════════════════════════╝"
+    )
+    print(
+        f"{Fore.YELLOW}- - - - - - - - - - - - - - - - - - - - - [ THÔNG TIN ] - - - - - - - - - - - - - - - - - - - -"
+    )
+    print(
+        f"{Fore.YELLOW} Xin chào {Fore.LIGHTYELLOW_EX}{name.text} {Fore.YELLOW}- Mã sinh viên: {Fore.LIGHTYELLOW_EX}{id.text}                                         "
+    )
+
+
+def KiemTraTienDoLMS():
+    sleep(4)
+    mon = 1
+    while True:
+        try:
+            check = autoDoiPhanTuHienThi_CSS_SELECTOR(
+                driver, 2, f".classes-item:nth-child({mon}) .circle-progress-content"
+            )
+            mon += 1
+
+        except:
+            break
+    mon -= 1
+    monHoanThanh = 1
+    tenMonChuaHoanThanh = []
+    for i in range(1, mon, 1):
+        check = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 2, f".classes-item:nth-child({i}) .circle-progress-content"
+        )
+        checkHoanThanhTienDo = check.text
+        if checkHoanThanhTienDo == "100%":
+            monHoanThanh += 1
+        else:
+            tenMon = autoDoiPhanTuHienThi_CSS_SELECTOR(
+                driver,
+                30,
+                f".classes-item:nth-child({i}) .progress-left_content__top-name",
+            )
+            tenMonChuaHoanThanh.append(tenMon)
+
+    if monHoanThanh == 5:
+        print(
+            f" {Fore.YELLOW}Bạn đã hoàn thành {Fore.GREEN}{monHoanThanh}/{mon} {Fore.YELLOW}môn, chúc mừng bạn!!!"
+        )
+    else:
+        print(
+            f" {Fore.YELLOW}Bạn đã hoàn thành {Fore.RED}{monHoanThanh}/{mon} {Fore.YELLOW}môn, hãy làm trước khi hết hạn nhé"
+        )
+        for mon in tenMonChuaHoanThanh:
+            print(f" {Fore.YELLOW}[Môn chưa làm]: {Fore.LIGHTYELLOW_EX}{mon.text}")
+
+
+def ButtonSaoChepCauHoiLMS():
+    try:
+        # Phần 1: Tạo button và lưu vào window
+        js_part_1 = """
+        window.copyButton = document.createElement('button');
+        window.copyButton.innerHTML = 'Sao chép câu hỏi';
+        window.copyButton.style.position = 'fixed';
+        window.copyButton.style.bottom = '20px';
+        window.copyButton.style.right = '20px';
+        window.copyButton.style.padding = '10px 20px';
+        window.copyButton.style.backgroundColor = '#007BFF'; // Màu xanh da trời
+        window.copyButton.style.color = '#fff'; // Màu chữ trắng
+        window.copyButton.style.border = 'none';
+        window.copyButton.style.borderRadius = '5px';
+        window.copyButton.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.2)';
+        window.copyButton.style.cursor = 'pointer';
+        window.copyButton.style.fontSize = '16px';
+        window.copyButton.style.fontFamily = 'Arial, sans-serif';
+        window.copyButton.style.zIndex = '1000';
+        document.body.appendChild(window.copyButton);
+        """
+        driver.execute_script(js_part_1)
+
+        # Phần 2: Thêm sự kiện hover cho button
+        js_part_2 = """
+        window.copyButton.addEventListener('mouseenter', function() {
+        window.copyButton.style.backgroundColor = '#0056b3';
+        window.copyButton.style.boxShadow = '0px 6px 12px rgba(0, 0, 0, 0.3)';
+        });
+        window.copyButton.addEventListener('mouseleave', function() {
+        window.copyButton.style.backgroundColor = '#007BFF';
+        window.copyButton.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.2)';
+        });
+        """
+        driver.execute_script(js_part_2)
+
+        # Phần 3: Hàm sao chép câu hỏi
+        js_part_3 = """
+        function gH(cN) {
+        var e = document.querySelector('.' + cN);
+        return e ? e.outerHTML : null;
+        }
+
+        function hT(h) {
+        var d = document.createElement('div');
+        d.innerHTML = h;
+        var t = d.innerHTML.replace(/&nbsp;/g, ' ')
+            .replace(/<br\\s*\\/?>/gi, '\\n')
+            .replace(/<\/p>/gi, '\\n')
+            .replace(/<p>/gi, '\\n')
+            .replace(/<\/?[^>]+(>|$)/g, '\\n');
+        t = t.replace(/\\n\\s*\\n/g, '\\n').trim();
+        return t.replace(/Câu này cần xem lại/g, '');
+        }
+
+        window.copyButton.addEventListener('click', function() {
+        var html = gH('present-single-question');
+        if (html) {
+            var text = hT(html);
+            navigator.clipboard.writeText(text).then(function() {
+            console.log('Đã sao chép câu hỏi vào clipboard!');
+            }).catch(function(err) {
+            console.error('Không thể sao chép', err);
+            });
+        } else {
+            console.log('Không tìm thấy câu hỏi để sao chép!');
+        }
+        });
+        """
+        driver.execute_script(js_part_3)
+
+    except Exception as e:
+        print(f"{Fore.RED}[LỖI]: KHÔNG THỂ KHỞI CHẠY JAVASCRIPT! {str(e)}")
+
+    # Để giữ trình duyệt mở cho đến khi đóng bằng tay
+    print(
+        f"{Fore.GREEN}[PHẢN HỒI]: {Fore.LIGHTWHITE_EX} Khởi tạo BUTTON sao chép câu hỏi khi làm bài LMS thành công!"
+    )
+    input(f"{Fore.YELLOW}[GÕ 'ENTER' ĐỂ VỀ PANEL]...")
+
+
+# Login LMS
+def MAIN(usernameLog, passwordLog):
+    ChuyenTab1()
+    driver.get("https://lms.ictu.edu.vn/dashboard/classes")
+
+    try:
+        tenTaiKhoan = autoKhiPhanTuCoTheClickDuoc_ID(driver, 20, "mat-input-0")
+        tenTaiKhoan.send_keys(usernameLog + "@ictu.edu.vn")  # tk
+
+        matKhau = autoKhiPhanTuCoTheClickDuoc_ID(driver, 20, "mat-input-1")
+        matKhau.send_keys(passwordLog)  # mk
+
+        dangNhap = autoKhiPhanTuCoTheClickDuoc_CLASS_NAME(driver, 20, "grid")
+        dangNhap.click()  # click đăng nhập
+    except:
+        pass
+
+    try:
+        xacNhanDangNhapThanhCong = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 10, ".header-button__feature__node"
+        )
+    except:
+        os.system("cls")
+        for i in range(3, 0, -1):
+            print(Fore.RED + "[LỖI]: Đăng nhập thất bại!!")
+            print(f"{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]")
+            sleep(1)
+            os.system("cls")
+        # os.system()
+        exit()
+    while True:
+        name = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 20, "h6")
+        id = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 20, "small")
+        if xacNhanDangNhapThanhCong.text == "LỚP HỌC PHẦN":
+            ThongBao(id=id, name=name)
+        KiemTraTienDoLMS()
+        print(
+            f"{Fore.YELLOW}- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+        )
+        select = input(f"{Fore.LIGHTYELLOW_EX}[SELECT]: ")
+        if select == "1":
+            ThucThi_BingAI()
+        elif select == "2":
+            ThucThi_BlackBoxAI()
+        elif select == "3":
+            ButtonSaoChepCauHoiLMS()
+        elif select == "*":
+            os.system("cls")
+            for i in range(3, 0, -1):
+                print(Fore.GREEN + "[PHẢN HỒI]: THOÁT TOOL!!")
+                print(f"{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]")
+                sleep(1)
+                os.system("cls")
+                # os.system()
+                exit()
+        else:
+            print(f"{Fore.RED}[LỖI]: Chức năng bạn chọn không hợp lệ, vui lòng thử lại")
+
+
 setTime = time.localtime()  # Settime
 os.system("cls")
 # làm đẹp
 init(autoreset=True)  # cái này để không bị lặp màu, tha hồ tùy chỉnh
 
 print(
-    f"{Fore.BLUE + Style.BRIGHT} - - - - - - - - - - - -  [DEMO TOOL AUTO LÀM BÀI TẬP LMS (BETA 1.0) - LMSHelper] - - - - - - - - - - - - "
+    f"{Fore.YELLOW}╔═════════════════════════════════════════════════════════════════════════════════════════════╗"
 )
 print(
-    f"{Fore.RED+Style.BRIGHT}[THÔNG BÁO {setTime.tm_mday}:{setTime.tm_mon}:{setTime.tm_year}]: {Fore.LIGHTGREEN_EX}Để đảm bảo kết quả bài kiểm tra của bạn đạt được hiệu quả tốt nhất, công cụ sẽ tự động hoàn thành đến câu hỏi số 15. \nSau đó, bạn sẽ có cơ hội tự kiểm tra và điều chỉnh trước khi nộp bài."
+    f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.0) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
 )
 print(
-    "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    f"{Fore.YELLOW}╚═════════════════════════════════════════════════════════════════════════════════════════════╝"
 )
-usern = input(f" {Fore.LIGHTWHITE_EX}Mã sinh viên [LMS/ICTU]: ")
+usern = input(f" {Fore.LIGHTYELLOW_EX}Mã sinh viên [LMS/ICTU]: ")
 passw = getpass.getpass(
-    f" {Fore.LIGHTWHITE_EX}Mật khẩu [LMS/ICTU](tàng hình ghi nhập): "
+    f" {Fore.LIGHTYELLOW_EX}Mật khẩu [LMS/ICTU](tàng hình ghi nhập): "
 )
+
 chrome_option = Options()
 chrome_option.add_argument("--log-level=3")  # Tắt log từ Selenium
 chrome_option.add_argument("--silent")  # Giảm thiểu các thông báo không cần thiết
-# chrome_option.add_argument(
-#     "user-data-dir=A:\Lap_trinh_py\RenLuyenSeleniumPython\Toollms\q"
-# )  # saveprofile
 driver = webdriver.Chrome(options=chrome_option)
-# LoginBlackBoxAI()
-# TraCuuBlackBoxAI("Test2.png")
-ThucThi_2(usern=usern, passw=passw)
 
-# tab = driver.window_handles
-# LoginLMS("DTC225201447", "24102004")
-# NhapHashcodeVaLamBai()
-
+MAIN(usernameLog=usern, passwordLog=passw)
+# ThongBao()
