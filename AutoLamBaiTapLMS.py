@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#Update 13:20 15-10-2024
 import time
 import os
 
@@ -533,7 +534,7 @@ os.system("cls")
 init(autoreset=True)  # cái này để không bị lặp màu, tha hồ tùy chỉnh
 
 print(
-    f"{Fore.BLUE + Style.BRIGHT} - - - - - - - - - - - -  [DEMO TOOL AUTO LÀM BÀI TẬP LMS (BETA 1.0) - DUCANHWORK26] - - - - - - - - - - - - "
+    f"{Fore.BLUE + Style.BRIGHT} - - - - - - - - - - - -  [DEMO TOOL AUTO LÀM BÀI TẬP LMS (BETA 1.0) - LMSHelper] - - - - - - - - - - - - "
 )
 print(
     f"{Fore.RED+Style.BRIGHT}[THÔNG BÁO {setTime.tm_mday}:{setTime.tm_mon}:{setTime.tm_year}]: {Fore.LIGHTGREEN_EX}Để đảm bảo kết quả bài kiểm tra của bạn đạt được hiệu quả tốt nhất, công cụ sẽ tự động hoàn thành đến câu hỏi số 15. \nSau đó, bạn sẽ có cơ hội tự kiểm tra và điều chỉnh trước khi nộp bài."
