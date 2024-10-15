@@ -34,4 +34,4 @@ except ImportError:
 
 from time import sleep
 
-print(f"{Fore.RED} LMSHelper Bảo Trì Hôm Nay!!!")
+print(f"{Fore.RED} LMSHelper Bảo Trì Hôm Nay!!!") # Bảo trì
