@@ -496,7 +496,7 @@ def ThongBao(id, name):
         f"{Fore.YELLOW}╔═════════════════════════════════════════════════════════════════════════════════════════════╗"
     )
     print(
-        f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.0) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
+        f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.1) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
     )
     print(
         f"{Fore.YELLOW}║═════════════════════════════════════════════════════════════════════════════════════════════║"
@@ -730,7 +730,7 @@ print(
     f"{Fore.YELLOW}╔═════════════════════════════════════════════════════════════════════════════════════════════╗"
 )
 print(
-    f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.0) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
+    f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.1) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
 )
 print(
     f"{Fore.YELLOW}╚═════════════════════════════════════════════════════════════════════════════════════════════╝"
