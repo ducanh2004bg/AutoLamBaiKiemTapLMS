@@ -669,7 +669,7 @@ def MAIN(usernameLog, passwordLog):
 
     try:
         tenTaiKhoan = autoKhiPhanTuCoTheClickDuoc_ID(driver, 20, "mat-input-0")
-        tenTaiKhoan.send_keys(usernameLog + "@ictu.edu.vn")  # tk
+        tenTaiKhoan.send_keys(usernameLog)  # tk
 
         matKhau = autoKhiPhanTuCoTheClickDuoc_ID(driver, 20, "mat-input-1")
         matKhau.send_keys(passwordLog)  # mk
