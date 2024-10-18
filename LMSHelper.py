@@ -215,7 +215,45 @@ def LoginBlackBoxAI():
 """======================================== [QUÁ TRÌNH LÀM BÀI] ========================================"""
 
 
-# chon đáp án
+# Tự động lấy text câu hỏi hiện tại đang làm
+def LayTextCauHoiLMS():
+    # Chuyển đến tab chứa câu hỏi
+    ChuyenTab1()
+
+    # Lấy nội dung câu hỏi
+    question_text = driver.execute_script(
+        """
+        var questionLegend = document.querySelector('legend');
+        var questionContent = document.querySelector('.present-single-question__direction');
+        if (questionLegend && questionContent) {
+            return `${questionLegend.innerText.trim()} ${questionContent.innerText.trim()}`;
+        }
+        return '';
+        """
+    )
+
+    # Lấy nội dung đáp án
+    answers_text = driver.execute_script(
+        """
+        var answersText = "";
+        var answerElements = document.querySelectorAll('.question-type-radio__option');
+        if (answerElements.length) {
+            answerElements.forEach((answerElement) => {
+                var label = answerElement.getAttribute('data-ictu-question-prefix');
+                var answerText = answerElement.querySelector('.question-type-radio__answer-content').innerText.trim();
+                answersText += `${label}. ${answerText} `;
+            });
+        }
+        return answersText.trim();
+        """
+    )
+
+    # Kết hợp câu hỏi và đáp án
+    question_data = f"{question_text} {answers_text}"
+    return question_data
+
+
+# chon đáp án khi có câu trả lời (A,B,C,D)
 def ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi):
     # test()
     ChuyenTab1()
@@ -240,7 +278,7 @@ def ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi):
         ChonDapAn.click()
     else:
         pass
-        # Bạn hoàn thiện giúp tôi nếu không chọn được đáp án thì gọi lại hàm tracuuBingAI ra để gọi lại
+        # Bạn hoàn thiện giúp tôi nếu không chọn được đáp án thì gọi lại hàm tracuuBingAI_HinhAnh ra để gọi lại
     # bấm câu hỏi tiếp theo
     cauHoiTiepTheo = autoDoiPhanTuHienThi_CSS_SELECTOR(
         driver, 30, ".ictu-page-test__test-panel__single-nav__btn-control"
@@ -275,8 +313,13 @@ def ChupManHinhCauHoiHienTai(cauHoiHienTai):
     return tep
 
 
-# tra con chat bing - return câu trả lời khi AI trả lời
-def TraCuuBingAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
+# kiểm thử
+def test():
+    c = input("testing to ok: ")
+
+
+# tra con chat bing (dạng hình ảnh) - return câu trả lời khi AI trả lời
+def TraCuuBingAI_HinhAnh(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
     ChuyenTab2()
     driver.refresh()
     # test()
@@ -305,7 +348,7 @@ def TraCuuBingAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
         userInput.send_keys(Keys.SHIFT, Keys.ENTER)
 
         userInput.send_keys(
-            "Tôi rõ ràng đã bảo là quan sát kỹ ảnh, chỉ trả lời đúng một ký tự: A, B, C hoặc D. Không thêm văn bản thừa. Không thêm bất kỳ từ ngữ hoặc dấu câu nào khác (Không thêm dấu chấm đằng sau nha ví dụ: B. (không hợp lệ)). Chỉ xuất ra đúng một ký tự."
+            "Tôi rõ ràng đã bảo là quan sát kỹ ảnh, chỉ trả lời đúng một ký tự: A, B, C hoặc D. Không thêm văn bản thừa. Không thêm bất kỳ từ ngữ hoặc dấu câu nào khác, không thêm khoảng trống trước và sau hay dòng trên hoặc dòng dưới (Không thêm dấu chấm đằng sau nha ví dụ: B. (không hợp lệ)) Chỉ xuất ra đúng một ký tự duy nhất A B C D đừng thêm gì đằng sau, làm ơn."
         )
 
         # click gui
@@ -324,35 +367,88 @@ def TraCuuBingAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
         cauTraLoi = answer.text.strip()
 
         # xcheck xem cau hoi hop le chua
-        if cauTraLoi in ["A", "B", "C", "D"]:
-            return cauTraLoi
+        if cauTraLoi.strip().upper() in ["A", "B", "C", "D"]:
+            return cauTraLoi.strip().upper()
         else:
             khongTimDuocCauTraLoi += 1
             print(
                 Fore.RED
                 + f"[LỖI]: Câu trả lời không hợp lệ, thử lại lần {khongTimDuocCauTraLoi}..."
             )
-            return TraCuuBingAI(fileCanUpload, khongTimDuocCauTraLoi, max_attempts)
+            return TraCuuBingAI_HinhAnh(
+                fileCanUpload, khongTimDuocCauTraLoi, max_attempts
+            )
 
     except Exception as e:
         print(
             Fore.RED
             + f"[LỖI]: Ơ có lỗi gì thế nhỉ, bạn đăng nhập thành công BingAI chưa, phải đăng nhập mới làm được nhé^^"
         )
-        return TraCuuBingAI(fileCanUpload, khongTimDuocCauTraLoi + 1, max_attempts)
-
-    # searchbox = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 30, "searchbox")
-    # searchbox.send_keys(
-    #     "Bạn chỉ cần hiện thị đáp án không cần hiện thị câu trả lời ví dụ: \nCâu hỏi: 1+1 = ?\nA.1\nB.2\nC.3\nD.4\nBạn chỉ cần trả lời là : A (không có kí tự gì đằng sau)\n---"
-    #     + cauHoi
-    # )
+        return TraCuuBingAI_HinhAnh(
+            fileCanUpload, khongTimDuocCauTraLoi + 1, max_attempts
+        )
 
 
-def test():
-    c = input("testing to ok: ")
+def TraCuuBingAI_Text(cauHoi, khongTimDuocCauTraLoi=0, max_attempts=3):
+    ChuyenTab2()
+    driver.refresh()
+    if khongTimDuocCauTraLoi >= max_attempts:
+        return (
+            Fore.RED
+            + "[LỖI]: Đã thử nhiều lần nhưng không nhận được câu trả lời hợp lệ."
+        )
+
+    try:
+        userInput = autoDoiPhanTuHienThi_ID(driver, 30, "userInput")
+        userInput.click()
+        userInput.send_keys(
+            "Vui lòng chú ý cau hỏi trong ảnh mà tôi gửi và chỉ trả lời duy nhất một ký tự đại diện cho đáp án chính xác (A, B, C hoặc D). Không thêm bất kỳ văn bản nào khác hoặc ký tự nào khác vào câu trả lời. Chỉ xuất ra duy nhất ký tự."
+        )
+        userInput.send_keys(Keys.SHIFT, Keys.ENTER)
+
+        userInput.send_keys(
+            "Tôi rõ ràng đã bảo là quan sát kỹ ảnh, chỉ trả lời đúng một ký tự: A, B, C hoặc D. Không thêm văn bản thừa. Không thêm bất kỳ từ ngữ hoặc dấu câu nào khác, không thêm khoảng trống trước và sau hay dòng trên hoặc dòng dưới (Không thêm dấu chấm đằng sau nha ví dụ: B. (không hợp lệ)) Chỉ xuất ra đúng một ký tự duy nhất A B C D đừng thêm gì đằng sau, làm ơn."
+        )
+        userInput.send_keys(Keys.SHIFT, Keys.ENTER)
+        # dán câu hỏi
+        userInput.send_keys(cauHoi)
+
+        # click gui
+        try:
+            send = autoDoiPhanTuHienThi_CSS_SELECTOR(
+                driver, 10, ".text-foreground-800 > .size-6"
+            )
+            send.click()
+        except:
+            input.send_keys(Keys.ENTER)
+
+        sleep(2.5)
+
+        # lay cau tra loi
+        answer = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 30, ".space-y-3:nth-child(2) > .space-y-3 span"
+        )
+        cauTraLoi = answer.text.strip()
+        # xcheck xem cau hoi hop le chua
+        if cauTraLoi.strip().upper() in ["A", "B", "C", "D"]:
+            return cauTraLoi.strip().upper()
+        else:
+            khongTimDuocCauTraLoi += 1
+            print(
+                Fore.RED
+                + f"[LỖI]: Câu trả lời không hợp lệ, thử lại lần {khongTimDuocCauTraLoi}..."
+            )
+            return TraCuuBingAI_Text(cauHoi, khongTimDuocCauTraLoi, max_attempts)
+    except Exception as e:
+        print(
+            Fore.RED
+            + f"[LỖI]: Ơ có lỗi gì thế nhỉ, bạn đăng nhập thành công BingAI chưa, phải đăng nhập mới làm được nhé^^"
+        )
+        return TraCuuBingAI_Text(cauHoi, khongTimDuocCauTraLoi + 1, max_attempts)
 
 
-def TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
+# Auto tra cứu bằng blackbox- dạng hình ảnh
+def TraCuuBlackBoxAI_HinhAnh(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
     ChuyenTab2()
     driver.get("https://www.blackbox.ai/")
 
@@ -398,24 +494,82 @@ def TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi=0, max_attempts=3):
         cauTraLoi = answer.strip()
         # print(cauTraLoi)
         # xcheck xem cau hoi hop le chua
-        if cauTraLoi in ["A", "B", "C", "D"]:
-            return cauTraLoi
+        if cauTraLoi.strip().upper() in ["A", "B", "C", "D"]:
+            return cauTraLoi.strip().upper()
         else:
             khongTimDuocCauTraLoi += 1
             print(
                 Fore.RED
                 + f"[LỖI]: Câu trả lời không hợp lệ, thử lại lần {khongTimDuocCauTraLoi}..."
             )
-            return TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi, max_attempts)
+            return TraCuuBlackBoxAI_HinhAnh(
+                fileCanUpload, khongTimDuocCauTraLoi, max_attempts
+            )
     except Exception as e:
         print(Fore.RED + f"[LỖI]: {e} Có một vài lỗi tại BlackBoxAI bạn hãy thử lại^^")
-        return TraCuuBlackBoxAI(fileCanUpload, khongTimDuocCauTraLoi + 1, max_attempts)
+        return TraCuuBlackBoxAI_HinhAnh(
+            fileCanUpload, khongTimDuocCauTraLoi + 1, max_attempts
+        )
+
+
+def TraCuuBlackBoxAI_Text(cauHoi, khongTimDuocCauTraLoi=0, max_attempts=3):
+    ChuyenTab2()
+    driver.get("https://www.blackbox.ai/?model=gemini-pro")
+
+    # driver.get("https://www.blackbox.ai/")
+    if khongTimDuocCauTraLoi >= max_attempts:
+        return (
+            Fore.RED
+            + "[LỖI]: Đã thử nhiều lần nhưng không nhận được câu trả lời hợp lệ."
+        )
+
+    try:
+        input = autoDoiPhanTuHienThi_ID(driver, 30, "chat-input-box")
+        input.click()
+        input.send_keys(
+            "@Gemini-PRO "
+            + "Vui lòng chú ý cau hỏi trong ảnh mà tôi gửi và chỉ trả lời duy nhất một ký tự đại diện cho đáp án chính xác (A, B, C hoặc D). Không thêm bất kỳ văn bản nào khác hoặc ký tự nào khác vào câu trả lời. Chỉ xuất ra duy nhất ký tự."
+        )
+        input.send_keys(Keys.SHIFT, Keys.ENTER)
+        input.send_keys(
+            "Tôi rõ ràng đã bảo là quan sát kỹ ảnh, chỉ trả lời đúng một ký tự: A, B, C hoặc D. Không thêm văn bản thừa. Không thêm bất kỳ từ ngữ hoặc dấu câu nào khác, không thêm khoảng trống trước và sau hay dòng trên hoặc dòng dưới (Không thêm dấu chấm đằng sau nha ví dụ: B. (không hợp lệ)) Chỉ xuất ra đúng một ký tự duy nhất A B C D đừng thêm gì đằng sau, làm ơn."
+        )
+        input.send_keys(Keys.SHIFT, Keys.ENTER)
+        input.send_keys("[Câu hỏi như sau]: ")
+        input.send_keys(cauHoi)
+        sleep(1)
+        # send
+
+        # pyautogui.press("enter")
+        input.send_keys(Keys.ENTER)
+
+        nhanCauTraLoi = autoDoiPhanTuHienThi_CSS_SELECTOR(
+            driver, 30, ".prose:nth-child(3) > .mb-2"
+        )
+        answer = nhanCauTraLoi.text
+        cauTraLoi = answer.strip()
+        # print(cauTraLoi)
+        # xcheck xem cau hoi hop le chua
+        if cauTraLoi.strip().upper() in ["A", "B", "C", "D"]:
+            return cauTraLoi.strip().upper()
+        else:
+            khongTimDuocCauTraLoi += 1
+            print(
+                Fore.RED
+                + f"[LỖI]: Câu trả lời không hợp lệ, thử lại lần {khongTimDuocCauTraLoi}..."
+            )
+            return TraCuuBlackBoxAI_Text(cauHoi, khongTimDuocCauTraLoi, max_attempts)
+
+    except Exception as e:
+        print(Fore.RED + f"[LỖI]: {e} Có một vài lỗi tại BlackBoxAI bạn hãy thử lại^^")
+        return TraCuuBlackBoxAI_Text(cauHoi, khongTimDuocCauTraLoi + 1, max_attempts)
 
 
 """ =================================== [THỰC THI LÀM BÀI] ===================================="""
 
 
-def QuaTrinhLamBai():  # BẢN DÀNH CHO BINGAI -------------- BINGAI
+# BẢN DÀNH CHO BINGAI -------------- BINGAI (Hình ảnh)
+def QuaTrinhLamBai():
     cauSo = 0  # khoitao
     cauTraLoi = ""  # khoitao
     print(
@@ -428,14 +582,17 @@ def QuaTrinhLamBai():  # BẢN DÀNH CHO BINGAI -------------- BINGAI
             cauSo += 1  # tăng câu hỏi mỗi lần hoàn thành, lần đầu sẽ = 1
             fileCauHoi = ChupManHinhCauHoiHienTai(cauSo)  # lấy file câu hỏi
             sleep(1)
-            cauTraLoi = TraCuuBingAI(fileCanUpload=fileCauHoi)  # tra cứu câu hỏi đó
+            cauTraLoi = TraCuuBingAI_HinhAnh(
+                fileCanUpload=fileCauHoi
+            )  # tra cứu câu hỏi đó
             sleep(1)
             ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi)
             sleep(1)
             print(Fore.GREEN + f"---> [HOÀN THÀNH]: CÂU {cauSo} | Đáp án {cauTraLoi}")
 
 
-def QuaTrinhLamBai_2():  # BẢN DÀNH CHO BLACKBOX -------------- BLACKBOX---
+# BẢN DÀNH CHO BLACKBOX -------------- BLACKBOX (Hình ảnh)--
+def QuaTrinhLamBai_2():
     cauSo = 0  # khoitao
     cauTraLoi = ""  # khoitao
     print(
@@ -448,15 +605,84 @@ def QuaTrinhLamBai_2():  # BẢN DÀNH CHO BLACKBOX -------------- BLACKBOX---
             cauSo += 1  # tăng câu hỏi mỗi lần hoàn thành, lần đầu sẽ = 1
             fileCauHoi = ChupManHinhCauHoiHienTai(cauSo)  # lấy file câu hỏi
             sleep(1)
-            cauTraLoi = TraCuuBlackBoxAI(fileCanUpload=fileCauHoi)  # tra cứu câu hỏi đó
+            cauTraLoi = TraCuuBlackBoxAI_HinhAnh(
+                fileCanUpload=fileCauHoi
+            )  # tra cứu câu hỏi đó
             sleep(1)
             ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi)
             sleep(1)
             print(Fore.GREEN + f"---> [HOÀN THÀNH]: CÂU {cauSo} | Đáp án {cauTraLoi}")
 
 
-# Thực thi bản BingAI    BINGAI---------------
-def ThucThi_BingAI():
+# BẢN DÀNH CHO BLACKBOX -------------- BLACKBOX (TEXT)--
+def QuaTrinhLamBai_3():
+    cauSo = 0  # khoitao
+    cauTraLoi = ""  # khoitao
+    print(
+        f"{Fore.GREEN}===================================== [KẾT QUẢ] ====================================="
+    )
+    try:
+        xacMinh = autoDoiPhanTuHienThi_XPATH(
+            driver, 30, "//*[@id='mat-mdc-checkbox-1']/div/label"
+        )
+    except:
+        print(f"{Fore.RED}[LỖI]: CHƯA LOAD ĐƯỢC BÀI ")
+        print(Fore.GREEN + "[PHẢN HỒI]: ĐANG THOÁT TOOL!!")
+        for i in range(3, 0, -1):
+            print(f"\r{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]", end="")
+            sleep(1)
+            # os.system("cls")
+            # os.system()
+        exit()
+    while True:
+        if cauSo == 15:
+            break
+        else:
+            cauSo += 1
+            cauHoi = LayTextCauHoiLMS()
+            sleep(1)
+            cauTraLoi = TraCuuBlackBoxAI_Text(cauHoi)
+            # sleep(0.4)
+            ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi)
+            # sleep(0.4)
+            print(Fore.GREEN + f"---> [HOÀN THÀNH]: CÂU {cauSo} | Đáp án {cauTraLoi}")
+
+
+# BẢN DÀNH CHO BINGAI -------------- BINGAI (TEXT)--
+def QuaTrinhLamBai_4():
+    cauSo = 0  # khoitao
+    cauTraLoi = ""  # khoitao
+    print(
+        "===================================== [PHẢN HỒI] ====================================="
+    )
+    try:
+        xacMinh = autoDoiPhanTuHienThi_XPATH(
+            driver, 30, "//*[@id='mat-mdc-checkbox-1']/div/label"
+        )
+    except:
+        print(f"{Fore.RED}[LỖI]: CHƯA LOAD ĐƯỢC BÀI ")
+        print(Fore.GREEN + "[PHẢN HỒI]: ĐANG THOÁT TOOL!!")
+        for i in range(3, 0, -1):
+            print(f"\r{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]", end="")
+            sleep(1)
+            # os.system("cls")
+            # os.system()
+        exit()
+    while True:
+        if cauSo == 15:
+            break
+        else:
+            cauSo += 1  # tăng câu hỏi mỗi lần hoàn thành, lần đầu sẽ = 1
+            cauHoi = LayTextCauHoiLMS()
+            cauTraLoi = TraCuuBingAI_Text(cauHoi)
+            sleep(1)
+            ChonDapAnVaChuyenCauHoi(cauSo, cauTraLoi)
+            sleep(1)
+            print(Fore.GREEN + f"---> [HOÀN THÀNH]: CÂU {cauSo} | Đáp án {cauTraLoi}")
+
+
+# Thực thi bản BingAI (Hình ảnh)   BINGAI---------------
+def ThucThi_BingAI_UpHinhAnh():
     LoginBingAI()
     NhapHashcodeVaLamBai()
     QuaTrinhLamBai()
@@ -467,12 +693,17 @@ def ThucThi_BingAI():
         Fore.GREEN
         + "[PHẢN HỒI]: ^^ Mình làm xong cho bạn rồi, nhưng mình sợ bạn không tin tưởng mình \ncho nên mình để bạn tự kiểm tra lại rồi bấm NỘP BÀI đó!!"
     )
-    tatTrinhDuyet = input("->[Gõ ENTER để thoát trình duyệt]...")
-    driver.quit()
+    while True:
+        tatTrinhDuyet = input("->[Gõ 'OK' để thoát trình duyệt]...")
+        if tatTrinhDuyet in ["OK", "ok", "Ok", "Oki", "*"]:
+            driver.quit()
+            break
+        else:
+            continue
 
 
-# Thực thi bản BlackBox  BLACKBOX--------------
-def ThucThi_BlackBoxAI():
+# Thực thi bản BlackBox (Hình ảnh)  BLACKBOX--------------
+def ThucThi_BlackBoxAI_UpHinhAnh():
     LoginBlackBoxAI()
     NhapHashcodeVaLamBai()
     QuaTrinhLamBai_2()
@@ -483,20 +714,68 @@ def ThucThi_BlackBoxAI():
         Fore.GREEN
         + "[PHẢN HỒI]: ^^ Mình làm xong cho bạn rồi, nhưng mình sợ bạn không tin tưởng mình \ncho nên mình để bạn tự kiểm tra lại rồi bấm NỘP BÀI đó!!"
     )
-    tatTrinhDuyet = input("->[Gõ ENTER để thoát trình duyệt]...")
-    driver.quit()
+    while True:
+        tatTrinhDuyet = input("->[Gõ 'OK' để thoát trình duyệt]...")
+        if tatTrinhDuyet in ["OK", "ok", "Ok", "Oki", "*"]:
+            driver.quit()
+            break
+        else:
+            continue
+
+
+# Thực thi bản BlackBox (Text)
+def ThucThi_BlackBoxAI_Text():
+    LoginBlackBoxAI()
+    NhapHashcodeVaLamBai()
+    QuaTrinhLamBai_3()
+    print(
+        "----------------------------------------------------------------------------------------------------------------------------------------"
+    )
+    print(
+        Fore.GREEN
+        + "[PHẢN HỒI]: ^^ Mình làm xong cho bạn rồi, nhưng mình sợ bạn không tin tưởng mình \ncho nên mình để bạn tự kiểm tra lại rồi bấm NỘP BÀI đó!!"
+    )
+    while True:
+        tatTrinhDuyet = input("->[Gõ 'OK' để thoát trình duyệt]...")
+        if tatTrinhDuyet in ["OK", "ok", "Ok", "Oki", "*"]:
+            driver.quit()
+            break
+        else:
+            continue
+
+
+# Thực thi bản BingAI (Text)
+def ThucThi_BingAI_Text():
+    LoginBingAI()  # Đăng nhập vào BingAI
+    NhapHashcodeVaLamBai()  # Bắt đầu quá trình làm bài
+    QuaTrinhLamBai_4()
+    print(
+        "----------------------------------------------------------------------------------------------------------------------------------------"
+    )
+    print(
+        Fore.GREEN
+        + "[PHẢN HỒI]: ^^ Mình làm xong cho bạn rồi, nhưng mình sợ bạn không tin tưởng mình \ncho nên mình để bạn tự kiểm tra lại rồi bấm NỘP BÀI đó!!"
+    )
+    while True:
+        tatTrinhDuyet = input("->[Gõ 'OK' để thoát trình duyệt]...")
+        if tatTrinhDuyet in ["OK", "ok", "Ok", "Oki", "*"]:
+            driver.quit()
+            break
+        else:
+            continue
 
 
 """ Đăng nhập và thông báo ... Của LMS"""
 
 
+# noti
 def ThongBao(id, name):
     os.system("cls")
     print(
         f"{Fore.YELLOW}╔═════════════════════════════════════════════════════════════════════════════════════════════╗"
     )
     print(
-        f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.1) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
+        f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.2) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
     )
     print(
         f"{Fore.YELLOW}║═════════════════════════════════════════════════════════════════════════════════════════════║"
@@ -504,11 +783,11 @@ def ThongBao(id, name):
     print(
         f"{Fore.YELLOW}║ [TB 15-10-2024]: {Fore.WHITE}Tool Auto: Sẽ dừng ở câu 15 để tránh điểm thấp khi dùng AI.           {Fore.YELLOW}     ║"
     )
+    # print(
+    #     f"{Fore.YELLOW}║ [TB 16-10-2024]: {Fore.WHITE}BingAI đang lỗi không gửi ảnh được, đợi fix rồi dùng chức năng 2 nhé. {Fore.YELLOW}     ║"
+    # )
     print(
-        f"{Fore.YELLOW}║ [TB 16-10-2024]: {Fore.WHITE}BingAI đang lỗi không gửi ảnh được, đợi fix rồi dùng chức năng 2 nhé. {Fore.YELLOW}     ║"
-    )
-    print(
-        f"{Fore.YELLOW}║ [TB 16-10-2024]: {Fore.WHITE}BlackBoxAI gửi ảnh kém chính xác, kiểm tra kỹ trước khi nộp. {Fore.YELLOW}              ║"
+        f"{Fore.YELLOW}║ [TB 18-10-2024]: {Fore.WHITE}BingAI hiện tại đang bị dính captcha hãy dùng tạm BlackBoxAI nha. {Fore.YELLOW}         ║"
     )
     print(
         f"{Fore.YELLOW}║═════════════════════════════════════════════════════════════════════════════════════════════║"
@@ -516,14 +795,17 @@ def ThongBao(id, name):
     print(
         f"{Fore.YELLOW}║ - - - - - - - - - - - - - - - - - - - - - [ PANEL ] - - - - - - - - - - - - - - - - - - - - ║"
     )
+    # print(
+    #     f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[1] | [AUTO] Làm bài tập ở lớp học phần trên trình duyệt - BINGAI(TEXT) (BETA)              {Fore.YELLOW}║"
+    # )
     print(
-        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[1] | [AUTO] Làm bài tập ở lớp học phần trên trình duyệt - BINGAI (BETA)                    {Fore.YELLOW}║"
+        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[1] | [AUTO] Làm bài tập ở lớp học phần trên trình duyệt - BLACKBOX(TEXT) (BETA)            {Fore.YELLOW}║"
     )
+    # print(
+    #     f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[3] | [AUTO] Làm bài tập ở lớp học phần trên trình duyệt - BINGAI(ẢNH) (BETA)               {Fore.YELLOW}║"
+    # )
     print(
-        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[2] | [AUTO] Làm bài tập ở lớp học phần trên trình duyệt - BLACKBOX (BETA)                  {Fore.YELLOW}║"
-    )
-    print(
-        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[3] | [ADD] Thêm BUTTON Sao chép câu hỏi khi làm LMS trên trình duyệt Chrome                {Fore.YELLOW}║"
+        f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[2] | [AUTO] Làm bài tập ở lớp học phần trên trình duyệt - BLACKBOX(ẢNH) (BETA)             {Fore.YELLOW}║"
     )
     print(
         f"{Fore.YELLOW}║ {Fore.LIGHTWHITE_EX}[*] | [EXIT] THOÁT TOOL                                                                     {Fore.YELLOW}║"
@@ -535,11 +817,13 @@ def ThongBao(id, name):
         f"{Fore.YELLOW}- - - - - - - - - - - - - - - - - - - - - [ THÔNG TIN ] - - - - - - - - - - - - - - - - - - - -"
     )
     print(
-        f"{Fore.YELLOW} Xin chào {Fore.LIGHTYELLOW_EX}{name.text} {Fore.YELLOW}- Mã sinh viên: {Fore.LIGHTYELLOW_EX}{id.text}                                         "
+        f"{Fore.YELLOW}Xin chào {Fore.LIGHTYELLOW_EX}{name.text} {Fore.YELLOW}- Mã sinh viên: {Fore.LIGHTYELLOW_EX}{id.text}                                         "
     )
 
 
+# Kiem tra tien do lms
 def KiemTraTienDoLMS():
+    print(f"{Fore.YELLOW}Đang kiểm tra tiến độ học tập...", end="")
     sleep(4)
     mon = 1
     while True:
@@ -548,7 +832,6 @@ def KiemTraTienDoLMS():
                 driver, 2, f".classes-item:nth-child({mon}) .circle-progress-content"
             )
             mon += 1
-
         except:
             break
     mon -= 1
@@ -569,101 +852,21 @@ def KiemTraTienDoLMS():
             )
             tenMonChuaHoanThanh.append(tenMon)
 
+    print("\r" + " " * 50, end="\r")
     if monHoanThanh == 5:
         print(
-            f" {Fore.YELLOW}Bạn đã hoàn thành {Fore.LIGHTGREEN_EX}{monHoanThanh}/{mon} {Fore.YELLOW}môn, chúc mừng bạn!!!"
+            f"{Fore.YELLOW}Bạn đã hoàn thành {Fore.LIGHTGREEN_EX}{monHoanThanh}/{mon} {Fore.YELLOW}môn, chúc mừng bạn!!!"
         )
     else:
         print(
-            f" {Fore.YELLOW}Bạn đã hoàn thành {Fore.LIGHTRED_EX}{monHoanThanh}/{mon} {Fore.YELLOW}môn, hãy làm trước khi hết hạn nhé"
+            f"{Fore.YELLOW}Bạn đã hoàn thành {Fore.LIGHTRED_EX}{monHoanThanh}/{mon} {Fore.YELLOW}môn, hãy làm trước khi hết hạn nhé"
         )
         for mon in tenMonChuaHoanThanh:
             print(f" {Fore.YELLOW}[Môn chưa làm]: {Fore.LIGHTYELLOW_EX}{mon.text}")
 
 
-def ButtonSaoChepCauHoiLMS():
-    try:
-        # Phần 1: Tạo button và lưu vào window
-        js_part_1 = """
-        window.copyButton = document.createElement('button');
-        window.copyButton.innerHTML = 'Sao chép câu hỏi';
-        window.copyButton.style.position = 'fixed';
-        window.copyButton.style.top = '13.5px';
-        window.copyButton.style.right = '20px';
-        window.copyButton.style.padding = '10px 20px';
-        window.copyButton.style.backgroundColor = '#007BFF'; // Màu xanh da trời
-        window.copyButton.style.color = '#fff'; // Màu chữ trắng
-        window.copyButton.style.border = 'none';
-        window.copyButton.style.borderRadius = '5px';
-        window.copyButton.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.2)';
-        window.copyButton.style.cursor = 'pointer';
-        window.copyButton.style.fontSize = '16px';
-        window.copyButton.style.fontFamily = 'Arial, sans-serif';
-        window.copyButton.style.zIndex = '1000';
-        document.body.appendChild(window.copyButton);
-        """
-        driver.execute_script(js_part_1)
-
-        # Phần 2: Thêm sự kiện hover cho button
-        js_part_2 = """
-        window.copyButton.addEventListener('mouseenter', function() {
-        window.copyButton.style.backgroundColor = '#0056b3';
-        window.copyButton.style.boxShadow = '0px 6px 12px rgba(0, 0, 0, 0.3)';
-        });
-        window.copyButton.addEventListener('mouseleave', function() {
-        window.copyButton.style.backgroundColor = '#007BFF';
-        window.copyButton.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.2)';
-        });
-        """
-        driver.execute_script(js_part_2)
-
-        # Phần 3: Hàm sao chép câu hỏi
-        js_part_3 = """
-        function gH(cN) {
-        var e = document.querySelector('.' + cN);
-        return e ? e.outerHTML : null;
-        }
-
-        function hT(h) {
-        var d = document.createElement('div');
-        d.innerHTML = h;
-        var t = d.innerHTML.replace(/&nbsp;/g, ' ')
-            .replace(/<br\\s*\\/?>/gi, '\\n')
-            .replace(/<\/p>/gi, '\\n')
-            .replace(/<p>/gi, '\\n')
-            .replace(/<\/?[^>]+(>|$)/g, '\\n');
-        t = t.replace(/\\n\\s*\\n/g, '\\n').trim();
-        return t.replace(/Câu này cần xem lại/g, '');
-        }
-
-        window.copyButton.addEventListener('click', function() {
-        var html = gH('present-single-question');
-        if (html) {
-            var text = hT(html);
-            navigator.clipboard.writeText(text).then(function() {
-            console.log('Đã sao chép câu hỏi vào clipboard!');
-            }).catch(function(err) {
-            console.error('Không thể sao chép', err);
-            });
-        } else {
-            console.log('Không tìm thấy câu hỏi để sao chép!');
-        }
-        });
-        """
-        driver.execute_script(js_part_3)
-
-    except Exception as e:
-        print(f"{Fore.RED}[LỖI]: KHÔNG THỂ KHỞI CHẠY JAVASCRIPT! {str(e)}")
-
-    # Để giữ trình duyệt mở cho đến khi đóng bằng tay
-    print(
-        f"{Fore.GREEN}[PHẢN HỒI]: {Fore.LIGHTWHITE_EX} Khởi tạo BUTTON sao chép câu hỏi khi làm bài LMS thành công!"
-    )
-    input(f"{Fore.YELLOW}[GÕ 'ENTER' ĐỂ VỀ PANEL]...")
-
-
 # Login LMS
-def MAIN(usernameLog, passwordLog):
+def MAIN(usernameLog, passwordLog, driver):
     ChuyenTab1()
     driver.get("https://lms.ictu.edu.vn/dashboard/classes")
 
@@ -685,13 +888,16 @@ def MAIN(usernameLog, passwordLog):
         )
     except:
         os.system("cls")
+        print(Fore.RED + "[LỖI]: ĐĂNG NHẬP THẤT BẠI!!")
         for i in range(3, 0, -1):
-            print(Fore.RED + "[LỖI]: Đăng nhập thất bại!!")
-            print(f"{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]")
+            print(f"\r{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]", end="")
             sleep(1)
-            os.system("cls")
+            # os.system("cls")
         # os.system()
         exit()
+    # while True:
+    #     test()
+    #     LayTextCauHoiLMS()
     while True:
         name = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 20, "h6")
         id = autoDoiPhanTuHienThi_CSS_SELECTOR(driver, 20, "small")
@@ -702,21 +908,25 @@ def MAIN(usernameLog, passwordLog):
             f"{Fore.YELLOW}- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
         )
         select = input(f"{Fore.LIGHTYELLOW_EX}[SELECT]: ")
-        if select == "1":
-            ThucThi_BingAI()
+        if select == "----sadjklf":
+            ThucThi_BingAI_Text()
+
+        elif select == "1":
+            ThucThi_BlackBoxAI_Text()
+
+        elif select == "1230948283094":
+            ThucThi_BingAI_UpHinhAnh()
         elif select == "2":
-            ThucThi_BlackBoxAI()
-        elif select == "3":
-            ButtonSaoChepCauHoiLMS()
+            ThucThi_BlackBoxAI_UpHinhAnh()
         elif select == "*":
             os.system("cls")
+            print(Fore.GREEN + "[PHẢN HỒI]: ĐANG THOÁT TOOL!!")
             for i in range(3, 0, -1):
-                print(Fore.GREEN + "[PHẢN HỒI]: THOÁT TOOL!!")
-                print(f"{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]")
+                print(f"\r{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]", end="")
                 sleep(1)
-                os.system("cls")
+                # os.system("cls")
                 # os.system()
-                exit()
+            exit()
         else:
             print(f"{Fore.RED}[LỖI]: Chức năng bạn chọn không hợp lệ, vui lòng thử lại")
 
@@ -730,7 +940,7 @@ print(
     f"{Fore.YELLOW}╔═════════════════════════════════════════════════════════════════════════════════════════════╗"
 )
 print(
-    f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.1) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
+    f"{Fore.YELLOW}║ - - - - - - - - - - - - - {Fore.LIGHTCYAN_EX}[LMSHelper (BETA 1.2) - {Fore.LIGHTBLUE_EX}D{Fore.LIGHTCYAN_EX}U{Fore.LIGHTMAGENTA_EX}C{Fore.LIGHTGREEN_EX}A{Fore.LIGHTRED_EX}N{Fore.LIGHTYELLOW_EX}H{Fore.LIGHTWHITE_EX}W{Fore.LIGHTBLUE_EX}O{Fore.LIGHTCYAN_EX}R{Fore.LIGHTMAGENTA_EX}K{Fore.LIGHTGREEN_EX}2{Fore.LIGHTRED_EX}6{Fore.YELLOW}] - - - - - - - - - - - - - - ║"
 )
 print(
     f"{Fore.YELLOW}╚═════════════════════════════════════════════════════════════════════════════════════════════╝"
@@ -756,23 +966,54 @@ print(
     f"{Fore.YELLOW}╚═════════════════════════════════════════════════════════════════════════════════════════════╝"
 )
 cauHinh = input(f" {Fore.LIGHTYELLOW_EX}[1 HOẶC 2]: ")
-if cauHinh == "1" or cauHinh == "mot":
-    chrome_option = Options()
-    chrome_option.add_argument("--log-level=3")  # Tắt log từ Selenium
-    chrome_option.add_argument("--silent")  # Giảm thiểu các thông báo không cần thiết
-    driver = webdriver.Chrome(options=chrome_option)
-elif cauHinh == "2" or cauHinh == "hai":
-    edge_option = EdgeOptions()  # Dùng EdgeOptions thay vì Chrome Options
-    edge_option.add_argument("--log-level=3")  # Tắt log từ Selenium
-    edge_option.add_argument("--silent")  # Giảm thiểu các thông báo không cần thiết
-    service = EdgeService()  # Khởi tạo service cho Edge driver
-    driver = webdriver.Edge(service=service, options=edge_option)  # Sử dụng Edge
+if cauHinh == "1" or cauHinh.lower() == "mot":
+    try:
+        chrome_option = Options()
+        chrome_option.add_argument(
+            "--log-level=3"
+        )  # Giảm thiểu mức log của trình duyệt
+        chrome_option.add_argument("--silent")  # Giảm thiểu thông báo không cần thiết
+        chrome_option.add_experimental_option(
+            "excludeSwitches", ["enable-logging"]
+        )  # Ẩn thông báo DevTools
+        chrome_option.add_argument("--disable-extensions")  # Tắt các tiện ích mở rộng
+        chrome_option.add_argument(
+            "--disable-infobars"
+        )  # Tắt các thanh thông tin tự động
+        driver = webdriver.Chrome(options=chrome_option)
+    except:
+        print(f"{Fore.RED}[LỖI]: TRÊU TUI À :(( BẠN CHƯA TẢI CHROME MÀ")
+        print(Fore.GREEN + "[PHẢN HỒI]: ĐANG THOÁT TOOL!!")
+        for i in range(3, 0, -1):
+            print(f"\r{Fore.LIGHTWHITE_EX}[TỰ ĐỘNG THOÁT SAU {i} GIÂY]", end="")
+            sleep(1)
+            # os.system("cls")
+            # os.system()
+        exit()
+elif cauHinh == "2" or cauHinh.lower() == "hai":
+    edge_option = EdgeOptions()
+    edge_option.add_argument("--log-level=3")
+    edge_option.add_argument("--silent")
+    edge_option.add_experimental_option(
+        "excludeSwitches", ["enable-logging"]
+    )  # Ẩn thông báo DevTools
+    edge_option.add_argument("--disable-extensions")
+    edge_option.add_argument("--disable-infobars")
+    service = EdgeService()
+    driver = webdriver.Edge(service=service, options=edge_option)
 else:
-    edge_option = EdgeOptions()  # Dùng EdgeOptions thay vì Chrome Options
-    edge_option.add_argument("--log-level=3")  # Tắt log từ Selenium
-    edge_option.add_argument("--silent")  # Giảm thiểu các thông báo không cần thiết
-    service = EdgeService()  # Khởi tạo service cho Edge driver
-    driver = webdriver.Edge(service=service, options=edge_option)  # Sử dụng Edge
+    edge_option = EdgeOptions()
+    edge_option.add_argument("--log-level=3")
+    edge_option.add_argument("--silent")
+    edge_option.add_experimental_option("excludeSwitches", ["enable-logging"])
+    edge_option.add_argument("--disable-extensions")
+    edge_option.add_argument("--disable-infobars")
+    service = EdgeService()  # Edge driver
+    driver = webdriver.Edge(service=service, options=edge_option)
 
-MAIN(usernameLog=usern, passwordLog=passw)
+
+# driver = khoi_tao_trinh_duyet(che_do_an=True)
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+MAIN(usernameLog=usern, passwordLog=passw, driver=driver)
+
 # ThongBao()
